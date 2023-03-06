@@ -43,10 +43,15 @@ class Solution:
 
             p.Mr = np.zeros(p.M, dtype=np.int32)
             p.Mc = np.zeros(p.M, dtype=np.int32)
+            p.Sx = np.zeros(p.M, dtype=np.int32)
+            p.Sy = np.zeros(p.M, dtype=np.int32)
             for j in range(p.M):
                 r, c = f.readline().split(" ")
                 p.Mr[j] = r
                 p.Mc[j] = c
+                p.Sx[j] = 0
+                p.Sy[j] = 0
+
             return p
 
     def dump(self):
@@ -59,13 +64,13 @@ class Solution:
         tot_score = 0
         tot_connected = 0
 
-        for i in range(self.M):
+        for i in range(self.N):  # for each building
             best_score = 0
             connected = 0
-            for j in range(self.N):
+            for j in range(self.M):  # for each antenna
                 # compute manhattan distance
-                dist = abs(self.Sx[i] - self.Nx[j]) + abs(self.Sy[i] - self.Ny[j])
-                score = (self.Nc[j] * self.Mc[j] + self.Nl[j] * dist) if dist <= self.Mr[i] else 0
+                dist = abs(self.Sx[j] - self.Nx[i]) + abs(self.Sy[j] - self.Ny[i])
+                score = (self.Nc[i] * self.Mc[j] - self.Nl[i] * dist) if dist <= self.Mr[j] else 0
                 if score > best_score:
                     best_score = score
                     connected = 1
